@@ -1,27 +1,18 @@
 import React, { Component } from "react";
 import { Route, Redirect } from "react-router-dom";
 
-interface PropType {
-    location: {}
-}
-
-interface VerifyTokenType {
-    routerConfig: any,
-    props: PropType
-}
-
-class VerifyToken extends Component<VerifyTokenType> {
+class VerifyToken extends Component<any,any> {
     
     render() {
-        console.log(this.props);
         const { routerConfig, location } = this.props;
         const { pathname } = location;
-        const isLogin = sessionStorage.getItem("token");
+        // const isLogin = sessionStorage.getItem("token");
+        const isLogin = false
         // 如果该路由不用进行权限校验，登录状态下登陆页除外
         // 因为登陆后，无法跳转到登陆页
         // 这部分代码，是为了在非登陆状态下，访问不需要权限校验的路由
         const targetRouterConfig = routerConfig.find(
-            (item) => {
+            (item:any) => {
                 return item.path.replace(/\s*/g,"") === pathname
             }
         );
@@ -31,7 +22,8 @@ class VerifyToken extends Component<VerifyTokenType> {
             const { component } = targetRouterConfig;
             return <Route path={pathname} component={component} />
         }
-
+        console.log(2);
+        
         if (isLogin) {
             // 如果是登陆状态，想要跳转到登陆，重定向到主页
             if (pathname === "/login") {
@@ -46,6 +38,7 @@ class VerifyToken extends Component<VerifyTokenType> {
                 }
             }
         } else {
+            console.log(1);
             // 非登陆状态下，当路由合法时且需要权限校验时，跳转到登陆页面，要求登陆
             if (targetRouterConfig && targetRouterConfig.auth) {
                 return <Redirect to="/login"/>;

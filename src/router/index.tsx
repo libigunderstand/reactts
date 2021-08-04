@@ -8,7 +8,6 @@ import routes from "./routes"
 
 class Routes extends Component {
     render() {
-        const routerConfig = routes
         return (
             <BrowserRouter>
                 <Switch>
